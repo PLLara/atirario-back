@@ -5,6 +5,7 @@ import (
 	"math"
 	"math/rand"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 
@@ -35,7 +36,12 @@ func main() {
 	go logTicks()
 
 	log.Println("Server is ready and listening on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	// get port from env variable
+	var SERVER_PORT = os.Getenv("PORT")
+	if SERVER_PORT == "" {
+		SERVER_PORT = "8080"
+	}
+	log.Fatal(http.ListenAndServe(":"+SERVER_PORT, nil))
 }
 
 var allConnections []*websocket.Conn = make([]*websocket.Conn, 0)
